@@ -271,10 +271,10 @@ private static final long serialVersionUID = -925518549680460124L;
 
 	@Override
 	////////////////////////////////////BOMBERMAN 1 CONTROLS //////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public void keyPressed(KeyEvent e){
 		// TODO Auto-generated method stub
@@ -332,27 +332,17 @@ private static final long serialVersionUID = -925518549680460124L;
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			
 			Timer timer = new Timer();
-			
-			
 					
-					try {
-						startBombCommand();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
-					//processExplosion(bombLabel, bomb_ex);
+			try {
+				startBombCommand();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 				
 			
 			TimerTask task2 = new TimerTask(){
 				public void run() {
-					
-					for (int i=0; i< 5 ; i++) {
-					bomb_ex[i].setCoordinates(0,0);
-					bombLabel[i].setLocation(bomb_ex[i].getX(), bomb_ex[i].getY());
-					bombLabel[i].setIcon(emptyImage);
-					}
 					
 					//hide enemy if they are caught by explosion
 					
@@ -383,10 +373,6 @@ private static final long serialVersionUID = -925518549680460124L;
 						
 					}
 					
-					for (int i=0; i< 4 ; i++) {
-						enemyLabel[i].setVisible(enemy[i].getVisible());
-					}
-				
 				}
 			};
 			
@@ -437,49 +423,6 @@ private static final long serialVersionUID = -925518549680460124L;
 				e1.printStackTrace();
 			}
 			
-			try {
-				Class.forName("org.sqlite.JDBC");
-				System.out.println("Database Driver Loaded");
-				
-				String dbURL = "jdbc:sqlite:product.db";
-				conn = DriverManager.getConnection(dbURL);
-				
-				if (conn != null) {
-					System.out.println("Connected to database");
-					conn.setAutoCommit(false);
-					
-					stmt = conn.createStatement();
-										
-					//String sql = "DROP TABLE SCORES";
-					//stmt.executeUpdate(sql);
-					//conn.commit();
-					
-					String sql = "CREATE TABLE IF NOT EXISTS SCORES " +
-					             "(ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-							     " NAME TEXT NOT NULL, " + 
-					             " SCORE INT NOT NULL) ";
-					
-					stmt.executeUpdate(sql);
-					conn.commit();
-					System.out.println("Table Created Successfully");
-					
-					sql = "INSERT INTO SCORES (NAME, SCORE) VALUES " + 
-	                        "('"+ player1_name+"', 0)";
-					stmt.executeUpdate(sql);
-					conn.commit();
-										
-					conn.close();
-				}
-				
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			
-						
 			map = new int[][] { {3,3,1,3,1,1,1,1,1,3,3,3},{3,2,1,3,2,3,1,2,1,3,2,3},{3,1,3,3,3,3,1,1,1,1,3,1},{3,3,3,3,2,1,3,2,1,1,3,1},{3,1,3,3,1,3,3,1,1,1,3,1},{3,2,3,1,2,1,3,2,1,1,2,1},{3,1,3,1,1,1,3,1,1,1,3,1} };
 			
 			//setting values to the bricks label according to the map
@@ -529,13 +472,6 @@ private static final long serialVersionUID = -925518549680460124L;
 			}
 			
 			
-			//for (int i=0; i< 4 ; i++) {
-			//	if (!enemy[i].getMoving()) { //check and make enemies move
-			//		//start moving
-			//		enemy[i].moveEnemy();
-			//	}
-			//}
-			
 		}
 	}
 	@Override
@@ -578,75 +514,7 @@ private static final long serialVersionUID = -925518549680460124L;
 			e.printStackTrace();
 		}	
 	}
-	
-//////////////////////////////////////////////////////INTERACTION WITH THE BOMBS/////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public void processExplosion(JLabel[] bomb,  bomb[] bomb_ex) {
-		
-		// checking if there is an unbreakable wall besides the bomb, if not then there is an explosion
-		for (int i=0; i< map.length ; i++) {
-			for (int j=0; j< map[i].length ; j++) {
-				
-				//bomb explosions check spaces beside the bomb
-				if ((brickLabel[i][j].getLocation().getX() == (bomb[0].getX()-25)) && (brickLabel[i][j].getLocation().getY() == (bomb[0].getY()-100))
-						&& map[i][j]!=2) {
-					bomb[1].setIcon(bombImage); 
-					bomb[1].setLocation(bomb[0].getX(), bomb[0].getY()-100);
-					bomb_ex[1].setCoordinates(bomb[0].getX(),bomb[0].getY()-100);
-					}
-				if ((brickLabel[i][j].getLocation().getX() == (bomb[0].getX()-25)) && (brickLabel[i][j].getLocation().getY() == (bomb[0].getY()+100))
-						&& map[i][j]!=2) {
-					bomb[2].setIcon(bombImage); 
-					bomb[2].setLocation(bomb[0].getX(), bomb[0].getY()+100);
-					bomb_ex[2].setCoordinates(bomb[0].getX(),bomb[0].getY()+100);
-					} 
-				if ((brickLabel[i][j].getLocation().getX() == (bomb[0].getX()+75)) && (brickLabel[i][j].getLocation().getY() == (bomb[0].getY()))
-						&& map[i][j]!=2) {
-					bomb[3].setIcon(bombImage);
-					bomb[3].setLocation(bomb[0].getX()+100, bomb[0].getY());
-					bomb_ex[3].setCoordinates(bomb[0].getX()+100,bomb[0].getY());	
-					}
-				if ((brickLabel[i][j].getLocation().getX() == (bomb[0].getX()-125)) && (brickLabel[i][j].getLocation().getY() == (bomb[0].getY()))
-					&& map[i][j]!=2) {
-					bomb[4].setIcon(bombImage);
-					bomb[4].setLocation(bomb[0].getX()-100,bomb[0].getY() );
-					bomb_ex[4].setCoordinates(bomb[0].getX()-100,bomb[0].getY());
-				}
-				
-			}
-		}
 
-		//Erase walls in case there was an explosion		
-		for (int i=0; i< map.length ; i++) {
-			for (int j=0; j< map[i].length ; j++) {
-				
-				//bomb explosions check spaces beside the bomb
-				for (int k=1; k< 5 ; k++) {
-					if ((brickLabel[i][j].getLocation().getX() == (bomb[k].getLocation().getX()-25)) 
-							&& (brickLabel[i][j].getLocation().getY() == (bomb[k].getLocation().getY())) 
-							&& map[i][j]!=2) {
-						brickLabel[i][j].setIcon(emptyImage);
-						map[i][j]=0;
-					}
-				}
-				
-				for (int k=0; k< 5 ; k++) {
-					//check if bomberman was caught in the explosions 
-					if (((bombermanLabel.getLocation().getX()-25) == (bomb[k].getLocation().getX()-25)) 
-							&& (bombermanLabel.getLocation().getY() == (bomb[k].getLocation().getY()))) {
-						bombermanLabel.setIcon(bombermanDownImage); 
-						player1flag=1;
-					}
-					
-				}
-											
-			}
-		}
-	}
-	
 ///////////////////////////////////////////////////////DISPLAY WIN AND LOSE WHEN PLAYER CLEARS THE GAME////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

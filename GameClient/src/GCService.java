@@ -1,9 +1,12 @@
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class GCService implements Runnable {
 
@@ -35,8 +38,6 @@ public class GCService implements Runnable {
 	}
 	
 	public void run() {
-		
-		
 		
 		try {
 			in = new Scanner(s.getInputStream());
@@ -107,11 +108,45 @@ public class GCService implements Runnable {
 			player1Label.setText(name);
 		}
 		
-		if (command.equals("BOMBERMAND")) {
+		if (command.equals("BOMBENEMY")) {
+			int enemyNo = in.nextInt();
+			enemy_Label[enemyNo].setIcon( new ImageIcon( getClass().getResource("enemy2.png")));
 			
-			bombermanLabel.setIcon(bombermanDownImage);
+			Timer timer = new Timer();
+			
+			TimerTask task = new TimerTask(){
+				public void run() {
+					enemy_Label[enemyNo].setVisible(false);
+				}
+				};
+				
+			timer.schedule(task, 1000);
 		}
 		
+		if (command.equals("BOMBERMAND")) {
+			
+			String name = in.next();
+			int score = in.nextInt();
+			
+			bombermanLabel.setIcon(bombermanDownImage);
+			Timer timer = new Timer();
+			
+			TimerTask task = new TimerTask(){
+				public void run() {
+					bombermanLabel.setVisible(false);
+				}
+				};
+				
+			timer.schedule(task, 1000);
+			
+			StringBuilder sb = new StringBuilder(64);
+			sb.append("<html><table><tr><td>Name</td><td>Score</td></tr>");
+			sb.append("<tr><td>"+name+"</td><td>"+score+"</td></tr>");
+		    sb.append("</table></html>");
+		    JOptionPane.showMessageDialog(null, sb, "Top Scores", JOptionPane.INFORMATION_MESSAGE);
+		    
+		}
+
 		if (command.equals("WALLS")) {
 			int positionX = in.nextInt();
 			int positionY = in.nextInt();
@@ -128,6 +163,18 @@ public class GCService implements Runnable {
 			enemy[enemyNo].setY(enemyY);
 			enemy_Label[enemyNo].setLocation(enemy[enemyNo].getX(),enemy[enemyNo].getY());
 			
+		}
+		
+		if (command.equals("DISPLAY")) {
+			String name = in.next();
+			int score = in.nextInt();
+			
+			StringBuilder sb = new StringBuilder(64);
+			
+			sb.append("<html><table><tr><td>Name</td><td>Score</td></tr>");
+			sb.append("<tr><td>"+name+"</td><td>"+score+"</td></tr>");
+		    sb.append("</table></html>");
+		    JOptionPane.showMessageDialog(null, sb, "Top Scores", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}
